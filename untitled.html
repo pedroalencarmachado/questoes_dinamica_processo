@@ -1,0 +1,65 @@
+
+<html>
+
+    <head>
+
+        <link href="estilo.css" rel="stylesheet">            
+
+    </head>
+
+<body style="background-color:#D3E7EB;">
+
+     <form action="/action_page.php">
+
+    <?php    
+        //Extraindo PATH_INFO
+        $aluno = $_POST['aluno'];
+        //$arr = parse_url($url);
+        //echo $url;
+
+        $host = "localhost:3306"; 
+        $username = "root"; 
+        $password = ""; 
+        $db = "processo_dinamica";
+
+        /*
+        $host = "localhost"; 
+        $username = "root"; 
+        $password = ""; 
+        $db = "alugaai"; 
+        */
+
+       mysql_connect($host,$username,$password) or die("Impossível conectar ao banco."); 
+
+        @mysql_select_db($db) or die("Impossível conectar ao banco"); 
+
+        $result=mysql_query("SELECT * FROM questao where fk_aluno=".$aluno) or die("Impossível executar a query"); 
+
+        $pontos = 0;
+        while($row=mysql_fetch_object($result)) { 
+
+           if(isset($_POST['$row->numero'])){
+                $pontos = $pontos + 0,5;
+           }else{
+                $pontos = $pontos - 0,3;
+           }
+        
+        }             
+
+        $sql = "UPDATE aluno SET ponto=$pontos WHERE id=$aluno";
+
+        if ($conn->query($sql) === TRUE) {
+        echo "Atualizado com sucesso";
+        } else {
+        echo "Erro" . $conn->error;
+        }
+       
+    ?>        
+    
+    <button type="submit">Salvar</button>
+    
+    </form>
+
+</body>
+
+</html>
